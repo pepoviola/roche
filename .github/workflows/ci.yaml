@@ -16,8 +16,28 @@ jobs:
           docker_channel: nightly
           # this value please see https://github.com/AkihiroSuda/moby-snapshot/releases
           docker_nightly_version: snapshot-20201008
-      - uses: icepuma/rust-action@master
+
+      - name: Run cargo fmt
+        run: cd test && cargo fmt --all -- --check
+
+      - uses: actions-rs/clippy-check@v1
+        with:
+          args: --all-features -Dwarnings
+
+      - name: Build
+        run: cd test && cargo build
         env:
           USER: roche
-        with:
-          args: cd tests && cargo fmt -- --check && cargo clippy -- -Dwarnings && cargo test
+
+      - name: Run test
+        run: cd test && cargo test --tests
+        env:
+          USER: roche
+
+
+
+      # - uses: icepuma/rust-action@master
+      #   env:
+      #     USER: roche
+      #   with:
+      #     args: cd tests && cargo fmt -- --check && cargo clippy -- -Dwarnings && cargo test
