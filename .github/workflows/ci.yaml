@@ -18,19 +18,20 @@ jobs:
           docker_nightly_version: snapshot-20201008
 
       - name: Run cargo fmt
-        run: cd test && cargo fmt --all -- --check
+        run: |
+          cargo fmt --all -- --check
 
       - uses: actions-rs/clippy-check@v1
         with:
           args: --all-features -Dwarnings
 
       - name: Build
-        run: cd test && cargo build
+        run:  cargo build
         env:
           USER: roche
 
       - name: Run test
-        run: cd test && cargo test --tests
+        run: cargo test --tests
         env:
           USER: roche
 
